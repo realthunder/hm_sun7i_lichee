@@ -345,7 +345,7 @@ motor_shake         = port:PB03<1><default><default><1>
 [gpio_para]
 gpio_used                = 1
 gpio_num                 = 2
-gpio_pin_1               = port:PA14<1><default><3><1>
+gpio_pin_1               = port:PA14<1><default><default><1>
 gpio_pin_2               = port:PI13<1><default><default><1>
 
 [leds_para]
@@ -1367,10 +1367,11 @@ pmu_twi_id               = 0
 pmu_irq_id               = 32
 pmu_battery_rdc          = 100
 pmu_battery_cap          = 3200
-pmu_init_chgcur          = 300
-pmu_earlysuspend_chgcur  = 600
+pmu_init_chgcur          = 1000
+pmu_runtime_chgcur       = 800
+pmu_earlysuspend_chgcur  = 900
 pmu_suspend_chgcur       = 1000
-pmu_resume_chgcur        = 300
+pmu_resume_chgcur        = 600
 pmu_shutdown_chgcur      = 1000
 pmu_init_chgvol          = 4200
 pmu_init_chgend_rate     = 15
@@ -1404,7 +1405,7 @@ pmu_usbvol               = 4000
 pmu_usbcur               = 0
 
 pmu_usbvol_pc            = 4400
-pmu_usbcur_pc            = 500
+pmu_usbcur_pc            = 0
 
 pmu_pwroff_vol           = 3300
 pmu_pwron_vol            = 2900

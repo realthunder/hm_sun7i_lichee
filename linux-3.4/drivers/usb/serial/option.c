@@ -632,6 +632,9 @@ static const struct usb_device_id option_ids[] = {
 	{ USB_DEVICE(0x0b3c, 0xc00a) }, //by Cesc. dongle for Brazil
     { USB_DEVICE(0x19f5, 0x9013) }, //by Cesc. Xinke
     { USB_DEVICE(0x19d2, 0x1177) }, //by Cesc. K3770-Z,ZTE. India
+    { USB_DEVICE(0x05C6, 0x9090) },  //for UC15
+    { USB_DEVICE(0x05C6, 0x9003) },  //for UC20
+    { USB_DEVICE(0x05C6, 0x9215) },  //for EC20
 	{ USB_DEVICE(OPTION_VENDOR_ID, OPTION_PRODUCT_COLT) },
 	{ USB_DEVICE(OPTION_VENDOR_ID, OPTION_PRODUCT_RICOLA) },
 	{ USB_DEVICE(OPTION_VENDOR_ID, OPTION_PRODUCT_RICOLA_LIGHT) },
