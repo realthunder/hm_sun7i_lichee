@@ -498,7 +498,7 @@ static int __devinit sw_ps2_probe(struct platform_device *pdev)
         snprintf(serio->name, sizeof(serio->name), "SW PS/2 port%d", pdev->id);
         snprintf(serio->phys, sizeof(serio->phys), "SW/serio%d", pdev->id);
         serio->port_data    = sw_ps2c_host[pdev->id];
-        serio->dev.parent   = &sw_ps2_device->dev;
+        serio->dev.parent   = &pdev->dev;
         
         serio_register_port(serio);
     
