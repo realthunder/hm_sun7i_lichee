@@ -1033,16 +1033,21 @@ static void synaptics_process_packet(struct psmouse *psmouse)
 		finger_width = 0;
 	}
 
-	if (SYN_CAP_ADV_GESTURE(priv->ext_cap_0c))
-		synaptics_report_semi_mt_data(dev, &hw, &priv->agm,
-					      num_fingers);
+	if (SYN_CAP_ADV_GESTURE(priv->ext_cap_0c)) {
+        if(hw.z < psmouse->finger_min) {
+            synaptics_report_semi_mt_slot(dev, 0, false, 0, 0);
+            synaptics_report_semi_mt_slot(dev, 1, false, 0, 0);
+        }else
+            synaptics_report_semi_mt_data(dev, &hw, &priv->agm,
+                            num_fingers);
+    }
 
 	/* Post events
 	 * BTN_TOUCH has to be first as mousedev relies on it when doing
 	 * absolute -> relative conversion
 	 */
-	if (hw.z > 30) input_report_key(dev, BTN_TOUCH, 1);
-	if (hw.z < 25) input_report_key(dev, BTN_TOUCH, 0);
+	if (hw.z > psmouse->finger_high) input_report_key(dev, BTN_TOUCH, 1);
+	if (hw.z < psmouse->finger_low) input_report_key(dev, BTN_TOUCH, 0);
 
 	if (num_fingers > 0) {
 		input_report_abs(dev, ABS_X, hw.x);

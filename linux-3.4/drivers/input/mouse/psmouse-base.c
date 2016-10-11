@@ -72,6 +72,18 @@ static unsigned int psmouse_resync_time;
 module_param_named(resync_time, psmouse_resync_time, uint, 0644);
 MODULE_PARM_DESC(resync_time, "How long can mouse stay idle before forcing resync (in seconds, 0 = never).");
 
+static unsigned int psmouse_finger_high = 30;
+module_param_named(finger_high, psmouse_finger_high, uint, 0644);
+MODULE_PARM_DESC(finger_high, "When finger pressure goes above this value, the touchpad counts it as a touch");
+
+static unsigned int psmouse_finger_low = 25;
+module_param_named(finger_low, psmouse_finger_low, uint, 0644);
+MODULE_PARM_DESC(finger_low, "When finger pressure is between finger_min and finger_low, the touchpad counts it as hovering");
+
+static unsigned int psmouse_finger_min = 20;
+module_param_named(finger_min, psmouse_finger_min, uint, 0644);
+MODULE_PARM_DESC(finger_min, "When finger pressure goes below this value, the touchpad counts it as a release");
+
 PSMOUSE_DEFINE_ATTR(protocol, S_IWUSR | S_IRUGO,
 			NULL,
 			psmouse_attr_show_protocol, psmouse_attr_set_protocol);
@@ -87,6 +99,15 @@ PSMOUSE_DEFINE_ATTR(resetafter, S_IWUSR | S_IRUGO,
 PSMOUSE_DEFINE_ATTR(resync_time, S_IWUSR | S_IRUGO,
 			(void *) offsetof(struct psmouse, resync_time),
 			psmouse_show_int_attr, psmouse_set_int_attr);
+PSMOUSE_DEFINE_ATTR(finger_high, S_IWUSR | S_IRUGO,
+			(void *) offsetof(struct psmouse, finger_high),
+			psmouse_show_int_attr, psmouse_set_int_attr);
+PSMOUSE_DEFINE_ATTR(finger_low, S_IWUSR | S_IRUGO,
+			(void *) offsetof(struct psmouse, finger_low),
+			psmouse_show_int_attr, psmouse_set_int_attr);
+PSMOUSE_DEFINE_ATTR(finger_min, S_IWUSR | S_IRUGO,
+			(void *) offsetof(struct psmouse, finger_min),
+			psmouse_show_int_attr, psmouse_set_int_attr);
 
 static struct attribute *psmouse_attributes[] = {
 	&psmouse_attr_protocol.dattr.attr,
@@ -94,6 +115,9 @@ static struct attribute *psmouse_attributes[] = {
 	&psmouse_attr_resolution.dattr.attr,
 	&psmouse_attr_resetafter.dattr.attr,
 	&psmouse_attr_resync_time.dattr.attr,
+	&psmouse_attr_finger_high.dattr.attr,
+	&psmouse_attr_finger_low.dattr.attr,
+	&psmouse_attr_finger_min.dattr.attr,
 	NULL
 };
 
@@ -1419,6 +1443,9 @@ static int psmouse_connect(struct serio *serio, struct serio_driver *drv)
 	psmouse->resetafter = psmouse_resetafter;
 	psmouse->resync_time = parent ? 0 : psmouse_resync_time;
 	psmouse->smartscroll = psmouse_smartscroll;
+    psmouse->finger_high = psmouse_finger_high;
+    psmouse->finger_low = psmouse_finger_low;
+    psmouse->finger_min = psmouse_finger_min;
 
 	psmouse_switch_protocol(psmouse, NULL);
 

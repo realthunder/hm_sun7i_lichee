@@ -63,6 +63,9 @@ struct psmouse {
 	unsigned int resetafter;
 	unsigned int resync_time;
 	bool smartscroll;	/* Logitech only */
+    unsigned int finger_high;
+    unsigned int finger_low;
+    unsigned int finger_min;
 
 	psmouse_ret_t (*protocol_handler)(struct psmouse *psmouse);
 	void (*set_rate)(struct psmouse *psmouse, unsigned int rate);
