@@ -30,6 +30,7 @@
 #include <asm/io.h>
 #include <linux/timer.h> 
 #include <mach/irqs-sun7i.h>
+#include <linux/init-input.h>
 
 #ifdef CONFIG_HAS_EARLYSUSPEND
     #include <linux/pm.h>
@@ -170,12 +171,6 @@ static unsigned char key_cnt = 0;
 static unsigned char cycle_buffer[REPORT_START_NUM] = {0};
 static unsigned char transfer_code = INITIAL_VALUE;
 
-enum {
-	DEBUG_INIT      = 1U << 0,
-	DEBUG_INT       = 1U << 1,
-	DEBUG_DATA_INFO = 1U << 2,
-	DEBUG_SUSPEND   = 1U << 3,
-};
 static u32 debug_mask = 0;
 #define dprintk(level_mask, fmt, arg...)	if (unlikely(debug_mask & level_mask)) \
 	printk(KERN_DEBUG fmt , ## arg)
@@ -381,14 +376,29 @@ static irqreturn_t sw_isr_key(int irq, void *dummy)
 
 static int __init swkbd_init(void)
 {
-	int i;
-	int err =0;	
+	int i, val = 0, err = 0;	
+    char *key[2] = {
+        "tabletkeys_para",
+        "tabletkeys_used"};
+    char subkey[16];
 
-	dprintk(DEBUG_INIT, "sun4ikbd_init \n");
+	get_int_para(key, &val, 1);
+	if (val == 0)
+		return -ENODEV;
+
+    key[1] = subkey;
+	for (i = 0; i < KEY_MAX_CNT; i++) {
+		snprintf(subkey, sizeof(subkey), "key%d_code", i);
+        val = 0;
+		get_int_para(key, &val, 1);
+        if(val) sw_scankeycodes[i] = val;
+	}
+
+	dprintk(DEBUG_INIT, "swkbd_init \n");
 
 	swkbd_dev = input_allocate_device();
 	if (!swkbd_dev) {
-		printk(KERN_ERR "sun4ikbd: not enough memory for input device\n");
+		printk(KERN_ERR "swkbd: not enough memory for input device\n");
 		err = -ENOMEM;
 		goto fail1;
 	}
