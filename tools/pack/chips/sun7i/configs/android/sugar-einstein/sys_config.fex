@@ -958,7 +958,7 @@ ps2_scl             = port:PI20<2><1><default><default>
 ps2_sda             = port:PI21<2><1><default><default>
 
 [ps2_1_para]
-ps2_used            = 0
+ps2_used            = 1
 ps2_scl             = port:PI14<3><1><default><default>
 ps2_sda             = port:PI15<3><1><default><default>
 
@@ -1300,6 +1300,7 @@ switch_used=1
 [ir_para]
 ir_used             = 1
 ir_rx               = port:PB04<2><default><default><default>
+ir_tx               = port:PB03<2><default><default><default>
 ir_wakeup           = 1
 power_key           = 0x18
 ir_addr_code        = 0xff00
@@ -1473,3 +1474,18 @@ env_sub01 = "specialstr"
 output_type              = 4
 output_mode              = 11
 auto_hpd                 = 1
+
+
+[tabletkeys_para]
+tabletkeys_used=1
+; vol+
+key0_code = 115 
+
+; vol-
+key1_code = 114
+
+; home
+key2_code = 102
+
+; back
+key3_code = 1
